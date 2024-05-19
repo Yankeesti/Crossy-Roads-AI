@@ -1,0 +1,2 @@
+class RoadSectionManager():
+    pass
