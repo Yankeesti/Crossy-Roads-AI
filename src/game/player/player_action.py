@@ -1,5 +1,7 @@
 from enum import Enum
-class Action(Enum):
+
+
+class PlayerAction(Enum):
     UP = 1
     DOWN = 2
     RIGHT = 3
