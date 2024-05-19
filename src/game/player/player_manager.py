@@ -13,3 +13,7 @@ class PlayerManager:
         self.players : pygame.sprite.Group = pygame.sprite.Group()
         for controller in controllers:
             self.players.add(Player(first_section,controller,self))
+    
+    def update(self) -> None:
+        for player in self.players:
+            player.update()

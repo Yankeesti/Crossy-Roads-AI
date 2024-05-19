@@ -18,4 +18,5 @@ class GameManager:
         pass
 
     def update(self) -> bool:
-        pass
+        self.player_manager.update()
+        return True
