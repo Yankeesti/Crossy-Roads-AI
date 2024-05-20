@@ -35,6 +35,7 @@ class BaseRoadSection(pygame.sprite.Sprite):
         if self.sections_to_draw is not None:
             return self.sections_to_draw
         self.sections_to_draw = [
+            self.previous_section.previous_section.previous_section,
             self.previous_section.previous_section,
             self.previous_section,
             self,
@@ -53,6 +54,12 @@ class BaseRoadSection(pygame.sprite.Sprite):
     def add_player(self, player: Player):
         self.players_on_section.add(player)
 
+    def remove_player(self, player: Player):
+        self.players_on_section.remove(player)
+
     @abc.abstractmethod
     def draw(self, surface: pygame.surface.Surface, y_offset: int):
         surface.blit(self.image, (0, self.rect[1] - y_offset))
+
+    def move_possible(self, player: Player, move: tuple[int, int]):
+        return True

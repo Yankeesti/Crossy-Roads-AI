@@ -8,12 +8,13 @@ from game.map.road_sections.base_road_section import BaseRoadSection
 class RoadSectionManager:
     def __init__(self):
         super().__init__()
-        section_neg_two = StaticRoadSection(index=-2, road_section_manager=self)
+        section_neg_three = StaticRoadSection(index=-3, road_section_manager=self)
+        section_neg_two = StaticRoadSection(index=-2, road_section_manager=self,previous_section=section_neg_three)
+        section_neg_three.next_section = section_neg_two
         section_neg_one = StaticRoadSection(
             index=-1, road_section_manager=self, previous_section=section_neg_two
         )
         section_neg_two.next_section = section_neg_one
-        section_neg_one.previous_section = section_neg_two
         self.road_sections: list[BaseRoadSection] = [StaticRoadSection(index=0, road_section_manager=self,previous_section=section_neg_one)]
         section_neg_one.next_section = self.road_sections[0]
 
@@ -21,7 +22,7 @@ class RoadSectionManager:
         sections_created: int = 0
         while sections_created < min_sections_to_generate:
             new_section = StaticRoadSection(
-                index=len(self.road_sections)-1,
+                index=len(self.road_sections),
                 road_section_manager=self,
                 previous_section=self.road_sections[-1],
             )

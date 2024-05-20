@@ -9,6 +9,7 @@ from .obstacles import StaticObstacle
 
 if TYPE_CHECKING:
     from game.map.road_section_manager import RoadSectionManager
+    from game.player.player import Player
 
 
 class StaticRoadSection(BaseRoadSection):
@@ -49,4 +50,9 @@ class StaticRoadSection(BaseRoadSection):
                 static_obstacle.image,
                 (static_obstacle.rect[0], static_obstacle.rect[1] - y_offset),
             )
- 
+
+    def move_possible(self, player: Player, move: tuple[int, int]):
+        player.rect.move_ip(move)
+        out_put = pygame.sprite.spritecollide(player, self.static_obstacles, False)
+        player.rect.move_ip((-move[0], -move[1]))
+        return out_put == []
