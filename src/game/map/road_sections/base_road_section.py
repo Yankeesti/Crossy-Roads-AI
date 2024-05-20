@@ -18,14 +18,13 @@ class BaseRoadSection(pygame.sprite.Sprite):
         surface: pygame.surface.Surface,
         road_section_manager: RoadSectionManager,
         previous_section: BaseRoadSection,
-        next_section: BaseRoadSection,
     ) -> None:
         super().__init__()
         self.image = surface
         self.rect = self.image.get_rect()
         self.index = index
         self.rect.bottomleft = (0, -(index * config.BLOCK_SIZE))
-        self.next_section = next_section
+        self.next_section = None
         self.previous_section = previous_section
         self.players_on_section = pygame.sprite.Group()
         self.sections_to_draw = None

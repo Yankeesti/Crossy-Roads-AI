@@ -5,7 +5,7 @@ import random
 
 from game import config
 from .base_road_section import BaseRoadSection
-from .obstacles import StaticObstacle
+from .obstacles.static_obstacle import StaticObstacle
 
 if TYPE_CHECKING:
     from game.map.road_section_manager import RoadSectionManager
@@ -27,7 +27,7 @@ class StaticRoadSection(BaseRoadSection):
         else:
             image.fill((37, 255, 0, 255))
         super().__init__(
-            index, image, road_section_manager, previous_section, next_section
+            index, image, road_section_manager, previous_section
         )
         self.static_obstacles = pygame.sprite.Group()
         self.init_static_obstacles(static_obstacle_positions)
