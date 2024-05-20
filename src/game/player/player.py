@@ -43,10 +43,16 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.killing_y_point -= config.BLOCK_SIZE * config.KILLING_POINT_SPEED
-        if self.moves[1] > 0:
-            self.moves[0]()
-            self.moves[1] -= 1
-        elif self.last_input_fetch >= config.INPUT_FETCH_INTERVAL:
+        if self.moves[1] > 0:#When move is not ended yet first finisch it
+            if self.moves[0] == PlayerAction.STAY:
+                self.moves[1] -= 1
+            else:
+                self.moves[0]()
+                self.moves[1] -= 1
+                if self.moves[1] == 0:
+                    self.moves = [PlayerAction.STAY,config.PLAYER_PAUSE_AFTER_MOVE]
+                    
+        elif self.last_input_fetch >= config.INPUT_FETCH_INTERVAL: 
             controller_input: PlayerAction = self.controller.get_action(None)
             if controller_input == PlayerAction.UP:
                 self.moves = [self.up, config.PLAYER_SPEED]

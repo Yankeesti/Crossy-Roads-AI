@@ -26,7 +26,6 @@ class HumanController(game.player.controller.Controller):
         pass
 
     def get_action(self, inputs):
-        print("get_action")
         global navigation_action,print_input
         out_put = navigation_action
         navigation_action = game.player_action.PlayerAction.STAY

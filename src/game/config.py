@@ -11,3 +11,4 @@ PLAYER_SPEED = 10  # Ticks needed to move 1 Block
 MAX_BLOCKS_BACK = 2
 INPUT_FETCH_INTERVAL = 10 #the interval in wich the Player Fetches the Input from the controller
 KILLING_POINT_SPEED = 0.005 #the speed at wich the killing point moves towards the player
+PLAYER_PAUSE_AFTER_MOVE = 20 #the amount of frames the player pauses after a move
