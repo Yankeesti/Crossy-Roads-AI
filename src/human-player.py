@@ -48,11 +48,11 @@ clock = pygame.time.Clock()
 gameManager = game.game_manager.GameManager(
     [HumanController()], game.map.road_section_manager.RoadSectionManager()
 )
-camera = game.camera.CameraBase(gameManager)
+camera = game.camera.PlayerCamera(gameManager)
 
 
 while True:
     clock.tick(60)
     if handle_key_press() == False or gameManager.update() == False:
         break
-    camera.draw()
+    camera.draw(gameManager.player_manager.sprites()[0])

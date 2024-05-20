@@ -5,6 +5,7 @@ import pygame
 from .game_manager import GameManager
 
 if TYPE_CHECKING:
+    from .player.player import Player
     from .map.road_sections.base_road_section import BaseRoadSection
 
 
@@ -33,3 +34,23 @@ class CameraBase:
             self.display_surface.blit(
                 player.image, (player.rect[0], player.rect[1] - self.y_offset)
             )
+
+
+class PlayerCamera(CameraBase):
+    def __init__(self, game_manager: GameManager) -> None:
+        super().__init__(game_manager)
+
+    def draw(self, player: Player) -> None:
+        self.display_surface.fill((0, 0, 0))
+        self.calc_y_offset(player)
+        self.draw_road_sections(player)
+        self.draw_players()
+        pygame.display.flip()
+
+    def draw_road_sections(self, player: Player):
+        super().draw_road_sections(player.sections[0].get_sections_to_draw())
+
+    def calc_y_offset(self, player: Player):
+        self.y_offset = (
+            player.rect[1] - (config.DISPLAYED_ROAD_SECTIONS - 3) * config.BLOCK_SIZE
+        )
