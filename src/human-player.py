@@ -1,7 +1,11 @@
 import pygame
 import game
-navigation_action :game.player_action.PlayerAction = game.player_action.PlayerAction.STAY
+
+navigation_action: game.player_action.PlayerAction = (
+    game.player_action.PlayerAction.STAY
+)
 print_input = False
+
 
 def handle_key_press():
     global navigation_action, print_input
@@ -12,7 +16,7 @@ def handle_key_press():
             if event.key == pygame.K_a:
                 navigation_action = game.player_action.PlayerAction.LEFT
             if event.key == pygame.K_d:
-                navigation_action =game.player_action.PlayerAction.RIGHT
+                navigation_action = game.player_action.PlayerAction.RIGHT
             if event.key == pygame.K_w:
                 navigation_action = game.player_action.PlayerAction.UP
             if event.key == pygame.K_s:
@@ -21,12 +25,13 @@ def handle_key_press():
                 print_input = True
     return True
 
+
 class HumanController(game.player.controller.Controller):
     def __init__(self):
         pass
 
     def get_action(self, inputs):
-        global navigation_action,print_input
+        global navigation_action, print_input
         out_put = navigation_action
         navigation_action = game.player_action.PlayerAction.STAY
         if print_input:
@@ -37,15 +42,17 @@ class HumanController(game.player.controller.Controller):
     def set_fitness(self, fitness):
         pass
 
+
 pygame.init()
 clock = pygame.time.Clock()
-gameManager = game.game_manager.GameManager([HumanController()], None)
+gameManager = game.game_manager.GameManager(
+    [HumanController()], game.map.road_section_manager.RoadSectionManager()
+)
 camera = game.camera.CameraBase(gameManager)
-camera.y_offset = -1000
+
 
 while True:
     clock.tick(60)
     if handle_key_press() == False or gameManager.update() == False:
         break
     camera.draw()
-

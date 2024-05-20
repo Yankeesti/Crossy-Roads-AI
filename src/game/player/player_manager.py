@@ -6,7 +6,7 @@ from game.player.player import Player
 
 if TYPE_CHECKING:
     import game.player.controller as controller
-    from ..map.road_sections.road_section_base import RoadSectionBase
+    from ..map.road_sections.base_road_section import RoadSectionBase
 
 
 class PlayerManager(pygame.sprite.Group):
@@ -18,5 +18,4 @@ class PlayerManager(pygame.sprite.Group):
         for controller in controllers:
             self.add(Player(first_section, controller, self))
 
-    def update(self) -> None:
-        self.update()
+        

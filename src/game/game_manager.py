@@ -12,7 +12,7 @@ class GameManager:
 
     def __init__(self,controllers : list[Controller],road_section_manager: RoadSectionManager,) -> None:
         self.road_section_manager = road_section_manager
-        self.player_manager = PlayerManager(controllers,None)
+        self.player_manager = PlayerManager(controllers,road_section_manager.road_sections[0])
 
     def reset(self,controllers : list[Controller],road_section_manager: RoadSectionManager) -> None:
         pass
