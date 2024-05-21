@@ -34,7 +34,9 @@ class RoadSectionManager:
         sections_created: int = 0
         while sections_created < min_sections_to_generate:
             section_group_size = random.choices(
-                config.DYNAMIC_SECTION_IN_A_ROW, config.DYNAMIC_SECTION_IN_A_ROW_PROB, k = 1
+                config.DYNAMIC_SECTION_IN_A_ROW,
+                config.DYNAMIC_SECTION_IN_A_ROW_PROB,
+                k=1,
             )[0]
             for _ in range(section_group_size):
                 self.generate__dynamic_section()
@@ -46,7 +48,6 @@ class RoadSectionManager:
             )
             self.road_sections[-1].next_section = static_section
             self.road_sections.append(static_section)
-            
 
     def generate__dynamic_section(self):
         over_hang = round(random.uniform(0, config.MAX_OVERHANG), 2)
@@ -79,3 +80,12 @@ class RoadSectionManager:
         for section in self.road_sections:
             section.update()
         pass
+
+    def to_dict(self):
+        output = [section.to_dict() for section in self.road_sections]
+        output.insert(0, self.road_sections[0].previous_section.to_dict())
+        output.insert(0, self.road_sections[0].previous_section.previous_section.to_dict())
+        output.insert(
+            0, self.road_sections[0].previous_section.previous_section.previous_section.to_dict()
+        )
+        return output
