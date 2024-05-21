@@ -83,6 +83,7 @@ class DynamicRoadSection(BaseRoadSection):
             self.init_cars_move_right()
         else:
             self.init_cars_move_left()
+        self.car_direction: MovingDirection = car_direction
 
     def init_cars_move_right(self):
         for pos in self.car_starting_positions:
@@ -112,3 +113,13 @@ class DynamicRoadSection(BaseRoadSection):
         super().draw(surface, y_offset)
         for car in self.cars:
             surface.blit(car.image, (car.rect[0], car.rect[1] - y_offset))
+
+    def to_dict(self):
+        return {
+            "type": "DynamicRoadSection",
+            "index": self.index,
+            "car_speed": self.car_speed,
+            "car_direction": self.car_direction.value,
+            "car_starting_positions": self.car_starting_positions,
+            "border_overhang": self.border_overhang,
+        }

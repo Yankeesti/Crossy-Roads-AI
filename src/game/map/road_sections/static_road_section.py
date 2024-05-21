@@ -26,19 +26,18 @@ class StaticRoadSection(BaseRoadSection):
             image.fill((0, 161, 43, 255))
         else:
             image.fill((37, 255, 0, 255))
-        super().__init__(
-            index, image, road_section_manager, previous_section
-        )
+        super().__init__(index, image, road_section_manager, previous_section)
         self.static_obstacles = pygame.sprite.Group()
+        self.static_obstacle_positions = static_obstacle_positions
         self.init_static_obstacles(static_obstacle_positions)
 
     def init_static_obstacles(self, static_obstacle_positions: list[int]) -> None:
         if static_obstacle_positions is None:
-            static_obstacle_positions = random.sample(
+            self.static_obstacle_positions = random.sample(
                 range(0, config.ROAD_COLUMNS + 2 * config.UNSTEPABLEE_COLUMNS),
                 random.randint(0, 3),
             )
-        for position in static_obstacle_positions:
+        for position in self.static_obstacle_positions:
             self.static_obstacles.add(
                 StaticObstacle(position * config.BLOCK_SIZE, self)
             )
@@ -56,3 +55,10 @@ class StaticRoadSection(BaseRoadSection):
         out_put = pygame.sprite.spritecollide(player, self.static_obstacles, False)
         player.rect.move_ip((-move[0], -move[1]))
         return out_put == []
+
+    def to_dict(self):
+        return {
+            "type": "StaticRoadSection",
+            "index": self.index,
+            "static_obstacle_positions": self.static_obstacle_positions,
+        }

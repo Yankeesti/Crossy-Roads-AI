@@ -59,6 +59,10 @@ class BaseRoadSection(pygame.sprite.Sprite):
     @abc.abstractmethod
     def draw(self, surface: pygame.surface.Surface, y_offset: int):
         surface.blit(self.image, (0, self.rect[1] - y_offset))
+    
+    @abc.abstractmethod
+    def to_dict(self):
+        pass
 
     def move_possible(self, player: Player, move: tuple[int, int]):
         return True
