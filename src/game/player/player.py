@@ -54,6 +54,8 @@ class Player(pygame.sprite.Sprite):
                 if self.moves[1] == 0:
                     self.sections.pop(1).remove_player(self)
                     self.moves = [PlayerAction.STAY, config.PLAYER_PAUSE_AFTER_MOVE]
+                    if self.highest_section.index < self.sections[0].index:
+                        self.highest_section = self.sections[0]
         elif self.last_input_fetch >= config.INPUT_FETCH_INTERVAL:
             controller_input: PlayerAction = self.controller.get_action(None)
             if controller_input == PlayerAction.UP:
@@ -67,6 +69,10 @@ class Player(pygame.sprite.Sprite):
             self.last_input_fetch = -1
         self.last_input_fetch += 1
 
+    def kill(self):
+        super().kill()
+        self.controller.set_fitness(self.highest_section.index)
+
     def init_up(self):
         if (
             self.sections[0]
@@ -75,7 +81,7 @@ class Player(pygame.sprite.Sprite):
         ):
             self.sections.insert(0, self.sections[0].next_section)
             self.moves = [self.up, config.PLAYER_SPEED]
-
+            self.sections[0].add_player(self)
     def up(self):
         self.rect[1] -= config.BLOCK_SIZE // config.PLAYER_SPEED
 
@@ -85,6 +91,7 @@ class Player(pygame.sprite.Sprite):
         ):
             self.sections.insert(0, self.sections[0].previous_section)
             self.moves = [self.down, config.PLAYER_SPEED]
+            self.sections[0].add_player(self)
 
     def down(self):
         self.rect[1] += config.BLOCK_SIZE // config.PLAYER_SPEED

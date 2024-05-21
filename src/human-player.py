@@ -35,12 +35,12 @@ class HumanController(game.player.controller.Controller):
         out_put = navigation_action
         navigation_action = game.player_action.PlayerAction.STAY
         if print_input:
-            print(input)
+            print(inputs)
             print_input = False
         return out_put
 
     def set_fitness(self, fitness):
-        pass
+        print("score: ", fitness)
 
 
 pygame.init()

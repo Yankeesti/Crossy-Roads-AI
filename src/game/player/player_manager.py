@@ -18,4 +18,8 @@ class PlayerManager(pygame.sprite.Group):
         for controller in controllers:
             self.add(Player(first_section, controller, self))
 
+    def update(self) -> bool:
+        super().update()
+        return len(self) > 0
+
         

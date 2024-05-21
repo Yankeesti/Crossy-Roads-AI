@@ -102,6 +102,11 @@ class DynamicRoadSection(BaseRoadSection):
 
     def update(self):
         self.cars.update()
+        dead_players = pygame.sprite.groupcollide(
+            self.players_on_section, self.cars, False, False
+        )
+        for player in dead_players:
+            player.kill()
 
     def draw(self, surface: pygame.surface.Surface, y_offset: int):
         super().draw(surface, y_offset)

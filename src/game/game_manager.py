@@ -27,6 +27,5 @@ class GameManager:
         pass
 
     def update(self) -> bool:
-        self.player_manager.update()
         self.road_section_manager.update()
-        return True
+        return self.player_manager.update()
