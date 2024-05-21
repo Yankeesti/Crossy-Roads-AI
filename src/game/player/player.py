@@ -45,6 +45,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.killing_y_point -= config.BLOCK_SIZE * config.KILLING_POINT_SPEED
+        if self.killing_y_point < self.rect.bottom:
+            self.kill()
         if self.moves[1] > 0:  # When move is not ended yet first finish it
             if self.moves[0] == PlayerAction.STAY:
                 self.moves[1] -= 1
@@ -56,6 +58,7 @@ class Player(pygame.sprite.Sprite):
                     self.moves = [PlayerAction.STAY, config.PLAYER_PAUSE_AFTER_MOVE]
                     if self.highest_section.index < self.sections[0].index:
                         self.highest_section = self.sections[0]
+                        self.update_killing_y_point()
         elif self.last_input_fetch >= config.INPUT_FETCH_INTERVAL:
             controller_input: PlayerAction = self.controller.get_action(None)
             if controller_input == PlayerAction.UP:
@@ -68,6 +71,14 @@ class Player(pygame.sprite.Sprite):
                 self.init_right()
             self.last_input_fetch = -1
         self.last_input_fetch += 1
+    
+    def update_killing_y_point(self):
+        new_killing_y_point = (
+            self.sections[0].rect.bottom
+            + config.MAX_BLOCKS_BACK * config.BLOCK_SIZE
+        )
+        if self.killing_y_point > new_killing_y_point:
+            self.killing_y_point = new_killing_y_point
 
     def kill(self):
         super().kill()
@@ -82,6 +93,7 @@ class Player(pygame.sprite.Sprite):
             self.sections.insert(0, self.sections[0].next_section)
             self.moves = [self.up, config.PLAYER_SPEED]
             self.sections[0].add_player(self)
+
     def up(self):
         self.rect[1] -= config.BLOCK_SIZE // config.PLAYER_SPEED
 
