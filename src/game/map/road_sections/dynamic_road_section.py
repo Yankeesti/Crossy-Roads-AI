@@ -123,3 +123,12 @@ class DynamicRoadSection(BaseRoadSection):
             "car_starting_positions": self.car_starting_positions,
             "border_overhang": self.border_overhang,
         }
+
+    def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
+        car_positions = [
+            car.get_position_relative_to_player(player) for car in self.cars
+        ]
+        car_positions.sort(key=lambda pos: abs(pos[0]))
+        default_values = [(15, 0)] * (3 - len(car_positions))
+        car_positions.extend(default_values)
+        return car_positions

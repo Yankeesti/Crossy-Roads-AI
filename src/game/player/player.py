@@ -60,7 +60,9 @@ class Player(pygame.sprite.Sprite):
                         self.highest_section = self.sections[0]
                         self.update_killing_y_point()
         elif self.last_input_fetch >= config.INPUT_FETCH_INTERVAL:
-            controller_input: PlayerAction = self.controller.get_action(None)
+            controller_input: PlayerAction = self.controller.get_action(
+                self.calc_input()
+            )
             if controller_input == PlayerAction.UP:
                 self.init_up()
             elif controller_input == PlayerAction.DOWN:
@@ -71,11 +73,42 @@ class Player(pygame.sprite.Sprite):
                 self.init_right()
             self.last_input_fetch = -1
         self.last_input_fetch += 1
-    
+
+    def calc_input(self):
+        input = []
+        input.append(
+            abs(self.rect.bottom - self.killing_y_point) / config.BLOCK_SIZE
+        )  # Distance to death
+        input.append(
+            -(self.rect.left - config.BORDER_LEFT) / config.BLOCK_SIZE
+        )  # space to left borderd
+        input.append(
+            -(self.rect.right - config.BORDER_RIGHT) / config.BLOCK_SIZE
+        )  # space to right border
+        input.append(
+            self.sections[0].previous_section.get_obstacle_positions_relative_to_player(
+                self
+            )
+        )  # obstacles in previous section
+        input.append(
+            self.sections[0].get_obstacle_positions_relative_to_player(self)
+        )  # obstacles in current section
+        input.append(
+            self.sections[0]
+            .get_next_section()
+            .get_obstacle_positions_relative_to_player(self)
+        )  # obstacles in next section
+        input.append(
+            self.sections[0]
+            .get_next_section()
+            .get_next_section()
+            .get_obstacle_positions_relative_to_player(self)
+        )  # obstacles in 2 sections ahead
+        return input
+
     def update_killing_y_point(self):
         new_killing_y_point = (
-            self.sections[0].rect.bottom
-            + config.MAX_BLOCKS_BACK * config.BLOCK_SIZE
+            self.sections[0].rect.bottom + config.MAX_BLOCKS_BACK * config.BLOCK_SIZE
         )
         if self.killing_y_point > new_killing_y_point:
             self.killing_y_point = new_killing_y_point
