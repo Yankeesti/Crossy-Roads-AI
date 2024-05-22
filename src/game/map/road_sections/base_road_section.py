@@ -45,7 +45,7 @@ class BaseRoadSection(pygame.sprite.Sprite):
             next_section = next_section.get_next_section()
         return self.sections_to_draw
 
-    def get_next_section(self):
+    def get_next_section(self) -> BaseRoadSection:
         if self.next_section is None:
             self.road_section_manager.generate_sections(1)
         return self.next_section
@@ -56,13 +56,17 @@ class BaseRoadSection(pygame.sprite.Sprite):
     def remove_player(self, player: Player):
         self.players_on_section.remove(player)
 
+    def move_possible(self, player: Player, move: tuple[int, int]):
+        return True
+
     @abc.abstractmethod
     def draw(self, surface: pygame.surface.Surface, y_offset: int):
         surface.blit(self.image, (0, self.rect[1] - y_offset))
-    
+
     @abc.abstractmethod
     def to_dict(self):
         pass
 
-    def move_possible(self, player: Player, move: tuple[int, int]):
-        return True
+    @abc.abstractmethod
+    def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
+        pass
