@@ -1,7 +1,7 @@
 BLOCK_SIZE = 100
 ROAD_COLUMNS = 9  # represents the colums that are stepable by the player
 DISPLAYED_ROAD_SECTIONS = (
-    5  # represents the number of road sections that are displayed on the screen
+    9  # represents the number of road sections that are displayed on the screen
 )
 UNSTEPABLEE_COLUMNS = 2  # represents the number of columns on th right and left side of the game that are not stapable by the player
 COLUMNS_TOTAL = ROAD_COLUMNS + UNSTEPABLEE_COLUMNS * 2

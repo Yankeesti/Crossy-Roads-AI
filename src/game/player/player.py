@@ -54,7 +54,8 @@ class Player(pygame.sprite.Sprite):
                 self.moves[0]()
                 self.moves[1] -= 1
                 if self.moves[1] == 0:
-                    self.sections.pop(1).remove_player(self)
+                    if len(self.sections) > 1:
+                        self.sections.pop(1).remove_player(self)
                     self.moves = [PlayerAction.STAY, config.PLAYER_PAUSE_AFTER_MOVE]
                     if self.highest_section.index < self.sections[0].index:
                         self.highest_section = self.sections[0]
@@ -145,7 +146,6 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left - config.BLOCK_SIZE * (
             config.UNSTEPABLEE_COLUMNS + 1
         ) >= 0 and self.sections[0].move_possible(self, (-config.BLOCK_SIZE, 0)):
-            self.sections.insert(0, self.sections[0])
             self.moves = [self.left, config.PLAYER_SPEED]
 
     def left(self):
@@ -157,7 +157,6 @@ class Player(pygame.sprite.Sprite):
             <= config.WINDOW_WIDTH - config.BLOCK_SIZE * config.UNSTEPABLEE_COLUMNS
             and self.sections[0].move_possible(self, (config.BLOCK_SIZE, 0))
         ):
-            self.sections.insert(0, self.sections[0])
             self.moves = [self.right, config.PLAYER_SPEED]
 
     def right(self):
