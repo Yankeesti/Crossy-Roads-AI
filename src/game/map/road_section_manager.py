@@ -25,7 +25,10 @@ class RoadSectionManager:
         section_neg_two.next_section = section_neg_one
         self.road_sections: list[BaseRoadSection] = [
             StaticRoadSection(
-                index=0, road_section_manager=self, previous_section=section_neg_one
+                index=0,
+                road_section_manager=self,
+                previous_section=section_neg_one,
+                static_obstacle_positions=[],
             )
         ]
         section_neg_one.next_section = self.road_sections[0]
@@ -84,8 +87,13 @@ class RoadSectionManager:
     def to_dict(self):
         output = [section.to_dict() for section in self.road_sections]
         output.insert(0, self.road_sections[0].previous_section.to_dict())
-        output.insert(0, self.road_sections[0].previous_section.previous_section.to_dict())
         output.insert(
-            0, self.road_sections[0].previous_section.previous_section.previous_section.to_dict()
+            0, self.road_sections[0].previous_section.previous_section.to_dict()
+        )
+        output.insert(
+            0,
+            self.road_sections[
+                0
+            ].previous_section.previous_section.previous_section.to_dict(),
         )
         return output

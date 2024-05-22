@@ -75,6 +75,4 @@ class NeatRoadSectionManager(game.map.road_section_manager.RoadSectionManager):
         self.__init__(index)
 
 
-generate_starting_road_sections(1, 4)
-temp = NeatRoadSectionManager(0, "src/neat_training/road_sections.json")
-print("test")
+

@@ -17,7 +17,9 @@ MAX_BLOCKS_BACK = 2
 INPUT_FETCH_INTERVAL = (
     10  # the interval in wich the Player Fetches the Input from the controller
 )
-KILLING_POINT_SPEED = 0  # the speed at wich the killing point moves towards the player
+KILLING_POINT_SPEED = (
+    0.05  # the speed at wich the killing point moves towards the player
+)
 PLAYER_PAUSE_AFTER_MOVE = 10  # the amount of frames the player pauses after a move
 
 # Road Section related

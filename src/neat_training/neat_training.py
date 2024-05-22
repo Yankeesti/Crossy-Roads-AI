@@ -15,7 +15,7 @@ road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
 
-played_games_per_generation: int = 20
+played_games_per_generation: int = 100
 
 
 def eval_genomes(genomes, config):
