@@ -24,7 +24,9 @@ class GameManager:
     def reset(
         self, controllers: list[Controller], road_section_manager: RoadSectionManager
     ) -> None:
-        pass
+        self.__init__(
+            controllers=controllers, road_section_manager=road_section_manager
+        )
 
     def update(self) -> bool:
         self.road_section_manager.update()
