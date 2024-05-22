@@ -7,3 +7,4 @@ from . import game_manager
 from .player import controller, player_action
 from . import camera
 from .map import road_section_manager
+from .map.road_sections import road_section_reader
