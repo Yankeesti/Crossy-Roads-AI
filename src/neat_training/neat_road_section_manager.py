@@ -64,15 +64,12 @@ class NeatRoadSectionManager(game.map.road_section_manager.RoadSectionManager):
             self.road_sections.append(section)
 
     def generate_sections(self, min_sections_to_generate: int):
-            super().generate_sections(10)
-            # Store newly generated Sections in File
-            self.complete_data[self.index] = self.to_dict
-            with open(self.file_path, "w") as file:
-                json.dump(self.complete_data, file)
-            self.generated_sections = True
+        super().generate_sections(10)
+        # Store newly generated Sections in File
+        self.complete_data[self.index] = self.to_dict()
+        with open(self.file_path, "w") as file:
+            json.dump(self.complete_data, file)
+        self.generated_sections = True
 
     def set_index(self, index: int):
         self.__init__(index)
-
-
-
