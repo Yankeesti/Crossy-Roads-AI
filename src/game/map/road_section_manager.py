@@ -4,6 +4,7 @@ import random
 from game import config
 from game.map.road_sections.static_road_section import StaticRoadSection
 from game.map.road_sections.base_road_section import BaseRoadSection
+from game.map.road_sections.border_section import BorderRoadSection
 from game.map.road_sections.dynamic_road_section import (
     DynamicRoadSection,
     get_random_car_positions,
@@ -19,7 +20,7 @@ class RoadSectionManager:
             index=-2, road_section_manager=self, previous_section=section_neg_three
         )
         section_neg_three.next_section = section_neg_two
-        section_neg_one = StaticRoadSection(
+        section_neg_one = BorderRoadSection(
             index=-1, road_section_manager=self, previous_section=section_neg_two
         )
         section_neg_two.next_section = section_neg_one
