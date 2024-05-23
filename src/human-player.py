@@ -1,6 +1,11 @@
 import pygame
 import game
 
+from neat_training.neat_road_section_manager import (
+    NeatRoadSectionManager,
+    generate_starting_road_sections,
+)
+
 navigation_action: game.player_action.PlayerAction = (
     game.player_action.PlayerAction.STAY
 )
@@ -46,7 +51,7 @@ class HumanController(game.player.controller.Controller):
 pygame.init()
 clock = pygame.time.Clock()
 gameManager = game.game_manager.GameManager(
-    [HumanController()], game.map.road_section_manager.RoadSectionManager()
+    [HumanController()], NeatRoadSectionManager(0)
 )
 camera = game.camera.PlayerCamera(gameManager)
 
