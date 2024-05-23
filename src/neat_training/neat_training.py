@@ -11,11 +11,12 @@ from neural_network_controller import NeuralNetworkController
 import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
+played_games_per_generation: int = 100
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
 
-played_games_per_generation: int = 100
+
 
 
 def eval_genomes(genomes, config):
@@ -48,9 +49,17 @@ def eval_genomes(genomes, config):
                     road_section_manager.generated_sections == True
                 ):  # when section were generated the this game needs to be replayed, so all genomes after this generation have the same game
                     repeat = True
+                    for controller in controllers:
+                        if len(controller.fitnesses) == i:
+                            controller.fitnesses.pop()
                     break
     for controller in controllers:
         controller.calc_fitness()
+
+    controllers.sort(key=lambda controller: controller.genome.fitness, reverse=True)
+    print(f"1. Genome({controllers[0].genome.key}),Fitness({controllers[0].genome.fitness}), Max({controllers[0].get_max_score()}) , Min({controllers[0].get_min_value()})")
+    print(f"2. Genome({controllers[1].genome.key}),Fitness({controllers[1].genome.fitness}), Max({controllers[1].get_max_score()}) , Min({controllers[1].get_min_value()})")
+    print(f"1. Genome({controllers[2].genome.key}),Fitness({controllers[2].genome.fitness}), Max({controllers[2].get_max_score()}) , Min({controllers[2].get_min_value()})")
 
 
 def run_neat(config, check_point: str = None) -> None:
@@ -58,14 +67,13 @@ def run_neat(config, check_point: str = None) -> None:
         p = neat.Checkpointer.restore_checkpoint(check_point)
     else:
         # generate new road_sections
-        neat_road_section_manager.generate_starting_road_sections(
-            played_games_per_generation, 10
-        )
+        print("generating Sections")
+        
         p = neat.Population(config)
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(neat.Checkpointer(1))
+    p.add_reporter(neat.Checkpointer(10))
     pygame.init()
     p.run(eval_genomes, 1000)
 
@@ -82,4 +90,4 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
-    run_neat(config)
+    run_neat(config,"neat-checkpoint-193")

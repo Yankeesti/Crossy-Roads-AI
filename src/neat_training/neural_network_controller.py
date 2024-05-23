@@ -29,3 +29,11 @@ class NeuralNetworkController(game.player.controller.Controller):
 
     def calc_fitness(self):
         self.genome.fitness = sum(self.fitnesses) / len(self.fitnesses)
+
+    def get_max_score(self):
+        max_value = max(self.fitnesses)
+        return f"{max_value} in Game {[i for i, x in enumerate(self.fitnesses) if x == max_value]}"
+
+    def get_min_value(self):
+        min_value = min(self.fitnesses)
+        return f"{min_value} in Game {[i for i, x in enumerate(self.fitnesses) if x == min_value]}"
