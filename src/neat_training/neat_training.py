@@ -57,9 +57,11 @@ def eval_genomes(genomes, config):
         controller.calc_fitness()
 
     controllers.sort(key=lambda controller: controller.genome.fitness, reverse=True)
-    print(f"1. Genome({controllers[0].genome.key}),Fitness({controllers[0].genome.fitness}), Max({controllers[0].get_max_score()}) , Min({controllers[0].get_min_value()})")
-    print(f"2. Genome({controllers[1].genome.key}),Fitness({controllers[1].genome.fitness}), Max({controllers[1].get_max_score()}) , Min({controllers[1].get_min_value()})")
-    print(f"1. Genome({controllers[2].genome.key}),Fitness({controllers[2].genome.fitness}), Max({controllers[2].get_max_score()}) , Min({controllers[2].get_min_value()})")
+    print(controllers[0])
+    print(controllers[1])
+    print(controllers[2])
+    print(controllers[-1])
+
 
 
 def run_neat(config, check_point: str = None) -> None:
@@ -90,4 +92,4 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
-    run_neat(config,"neat-checkpoint-193")
+    run_neat(config,"neat-checkpoint-194")
