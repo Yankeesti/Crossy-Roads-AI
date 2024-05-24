@@ -11,12 +11,11 @@ from neural_network_controller import NeuralNetworkController
 import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
-played_games_per_generation: int = 100
+played_games_per_generation: int = 1
+neat_road_section_manager.generate_starting_road_sections(1, 10)
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
-
-
 
 
 def eval_genomes(genomes, config):
@@ -50,18 +49,13 @@ def eval_genomes(genomes, config):
                 ):  # when section were generated the this game needs to be replayed, so all genomes after this generation have the same game
                     repeat = True
                     for controller in controllers:
-                        if len(controller.fitnesses) == i:
+                        if len(controller.fitnesses) > 1:
                             controller.fitnesses.pop()
                     break
     for controller in controllers:
         controller.calc_fitness()
 
     controllers.sort(key=lambda controller: controller.genome.fitness, reverse=True)
-    print(controllers[0])
-    print(controllers[1])
-    print(controllers[2])
-    print(controllers[-1])
-
 
 
 def run_neat(config, check_point: str = None) -> None:
@@ -70,14 +64,14 @@ def run_neat(config, check_point: str = None) -> None:
     else:
         # generate new road_sections
         print("generating Sections")
-        
+
         p = neat.Population(config)
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(neat.Checkpointer(10))
+    p.add_reporter(neat.Checkpointer(50))
     pygame.init()
-    p.run(eval_genomes, 1000)
+    p.run(eval_genomes, 10000)
 
 
 if __name__ == "__main__":
@@ -92,4 +86,4 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
-    run_neat(config,"neat-checkpoint-194")
+    run_neat(config)
