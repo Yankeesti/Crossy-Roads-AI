@@ -11,8 +11,8 @@ from neural_network_controller import NeuralNetworkController
 import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
-played_games_per_generation: int = 1
-neat_road_section_manager.generate_starting_road_sections(1, 10)
+played_games_per_generation: int = 4
+neat_road_section_manager.generate_starting_road_sections(4 , 10)
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
