@@ -49,4 +49,4 @@ class NeuralNetworkController(game.player.controller.Controller):
         return out_put
 
     def __str__(self):
-        return f"Genome({self.genome.key}),fitness ({self.genome.fitness}), Score distribution ({self.get_score_distribution()})"
+        return f"Genome({self.genome.key}),Species ({self.genome.s}),fitness ({self.genome.fitness}), Score distribution ({self.get_score_distribution()})"
