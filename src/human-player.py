@@ -28,6 +28,13 @@ def handle_key_press():
 
 class HumanController(game.player.controller.Controller):
     def __init__(self):
+        self.moves = {
+            game.player_action.PlayerAction.STAY: 0,
+            game.player_action.PlayerAction.UP: 0,
+            game.player_action.PlayerAction.DOWN: 0,
+            game.player_action.PlayerAction.LEFT: 0,
+            game.player_action.PlayerAction.RIGHT: 0,
+        }
         pass
 
     def get_action(self, inputs):
@@ -37,10 +44,15 @@ class HumanController(game.player.controller.Controller):
         if print_input:
             print(inputs)
             print_input = False
+        self.moves[out_put] += 1
         return out_put
 
     def set_fitness(self, fitness):
         print("score: ", fitness)
+        total_moves = sum(self.moves.values())
+        percentage_moves = {action: count / total_moves * 100 for action, count in self.moves.items()}
+        print("Moves Percentage:", percentage_moves)
+        print(self.moves)
 
 
 pygame.init()
