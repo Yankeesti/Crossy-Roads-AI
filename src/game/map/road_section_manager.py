@@ -45,26 +45,44 @@ class RoadSectionManager:
             for _ in range(section_group_size):
                 self.generate__dynamic_section()
             sections_created += section_group_size
-            static_section = StaticRoadSection(
+            section_group_size = random.choices(
+                config.STATIC_SECTIONS_IN_A_ROW,
+                config.STATIC_SECTIONS_IN_A_ROW_PROB,
+                k=1,
+            )[0]
+            for _ in range(section_group_size):
+                self.generate_static_section()
+            sections_created += section_group_size
+
+    def generate_static_section(self):
+        static_section = StaticRoadSection(
                 index=len(self.road_sections),
                 road_section_manager=self,
                 previous_section=self.road_sections[-1],
             )
-            self.road_sections[-1].next_section = static_section
-            self.road_sections.append(static_section)
+        self.road_sections[-1].next_section = static_section
+        self.road_sections.append(static_section)
 
     def generate__dynamic_section(self):
         over_hang = round(random.uniform(0, config.MAX_OVERHANG), 2)
         direction = random.choice([MovingDirection.LEFT, MovingDirection.RIGHT])
+        car_speed = round(
+                random.uniform(0.3 * config.MAX_CAR_SPEED, config.MAX_CAR_SPEED), 3
+            )
+        car_starting_positions :list[float]
+        if car_speed > 0.75*config.MAX_CAR_SPEED:
+            car_starting_positions = get_random_car_positions(over_hang, direction, 1)
+        elif car_speed > 0.55*config.MAX_CAR_SPEED:
+            car_starting_positions = get_random_car_positions(over_hang, direction, 2)
+        else:
+            car_starting_positions = get_random_car_positions(over_hang, direction)
         new_section = DynamicRoadSection(
             index=len(self.road_sections),
             road_section_manager=self,
             previous_section=self.road_sections[-1],
-            car_speed=round(
-                random.uniform(0.3 * config.MAX_CAR_SPEED, config.MAX_CAR_SPEED), 3
-            ),
+            car_speed=car_speed,
             car_direction=direction,
-            car_starting_positions=get_random_car_positions(over_hang, direction),
+            car_starting_positions=car_starting_positions,
             border_overhang=over_hang,
         )
 

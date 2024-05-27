@@ -16,9 +16,10 @@ if TYPE_CHECKING:
 
 
 def get_random_car_positions(
-    border_overhang: float, direction: MovingDirection
+    border_overhang: float, direction: MovingDirection, car_number: int = None
 ) -> list[float]:
-    car_number = random.randint(1, config.MAX_OBSTACLES)
+    if car_number is None:
+        car_number = random.randint(1, config.MAX_OBSTACLES)
     max_distance_per_car = config.COLUMNS_TOTAL / car_number - 1.8
     car_positions = [0]
     for i in range(1, car_number):

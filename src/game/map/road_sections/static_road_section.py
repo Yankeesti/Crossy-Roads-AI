@@ -35,7 +35,7 @@ class StaticRoadSection(BaseRoadSection):
         if static_obstacle_positions is None:
             self.static_obstacle_positions = random.sample(
                 range(0, config.ROAD_COLUMNS + 2 * config.UNSTEPABLEE_COLUMNS),
-                random.randint(0, 3),
+                random.randint(1, 3),
             )
         for position in self.static_obstacle_positions:
             self.static_obstacles.add(
