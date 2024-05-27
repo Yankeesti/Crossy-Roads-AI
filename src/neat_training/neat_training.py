@@ -12,10 +12,11 @@ import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
 played_games_per_generation: int = 4
-neat_road_section_manager.generate_starting_road_sections(4 , 10)
+neat_road_section_manager.generate_starting_road_sections(4, 10)
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
+clock: pygame.time.Clock = pygame.time.Clock()
 
 
 def eval_genomes(genomes, config):
@@ -58,6 +59,50 @@ def eval_genomes(genomes, config):
     controllers.sort(key=lambda controller: controller.genome.fitness, reverse=True)
 
 
+def eval_genomes_draw_game(genomes, config):
+    global gameManager, road_section_manager
+    controllers = [
+        NeuralNetworkController(genome, config) for genome_id, genome in genomes
+    ]
+    camera :game.camera.PlayerCamera
+    for i in range(
+        played_games_per_generation
+    ):  # outer loop to run one Genereation through multiple games and calculate a avarage fitness
+        repeat = True
+        while (
+            repeat
+        ):  # inner loop to replay the game if new Road Sections were generated
+            repeat = False
+            if gameManager is None:
+                gameManager = game.game_manager.GameManager(
+                    controllers, road_section_manager
+                )
+                camera = game.camera.PlayerCamera(gameManager)
+            else:
+                road_section_manager.set_index(i)
+                gameManager.reset(
+                    controllers=controllers, road_section_manager=road_section_manager
+                )
+            # Run game Loop
+            while True:
+                clock.tick(60)
+                if gameManager.update() == False:
+                    break
+                if (
+                    road_section_manager.generated_sections == True
+                ):  # when section were generated the this game needs to be replayed, so all genomes after this generation have the same game
+                    repeat = True
+                    for controller in controllers:
+                        if len(controller.fitnesses) > 1:
+                            controller.fitnesses.pop()
+                camera.draw(gameManager.player_manager.highest_player)
+
+    for controller in controllers:
+        controller.calc_fitness()
+
+    controllers.sort(key=lambda controller: controller.genome.fitness, reverse=True)
+
+
 def run_neat(config, check_point: str = None) -> None:
     if check_point is not None:
         p = neat.Checkpointer.restore_checkpoint(check_point)
@@ -71,7 +116,7 @@ def run_neat(config, check_point: str = None) -> None:
     p.add_reporter(stats)
     p.add_reporter(neat.Checkpointer(50))
     pygame.init()
-    p.run(eval_genomes, 10000)
+    p.run(eval_genomes_draw_game, 10000)
 
 
 if __name__ == "__main__":

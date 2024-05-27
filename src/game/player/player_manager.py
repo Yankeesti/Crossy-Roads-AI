@@ -17,9 +17,9 @@ class PlayerManager(pygame.sprite.Group):
         super().__init__()
         for controller in controllers:
             self.add(Player(first_section, controller, self))
+        self.highest_player: Player = self.sprites()[0]
 
     def update(self) -> bool:
         super().update()
-        return len(self) > 0
 
-        
+        return len(self) > 0

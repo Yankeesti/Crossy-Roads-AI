@@ -74,6 +74,8 @@ class Player(pygame.sprite.Sprite):
                 self.init_right()
             self.last_input_fetch = -1
         self.last_input_fetch += 1
+        if self.sections[0].index > self.manager.highest_player.sections[0].index:
+            self.manager.highest_player = self
 
     def calc_input(self):
         input = []
