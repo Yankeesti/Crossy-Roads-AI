@@ -22,7 +22,8 @@ class Player(pygame.sprite.Sprite):
         self.image: pygame.surface.Surface = pygame.Surface(
             (config.BLOCK_SIZE, config.BLOCK_SIZE)
         )
-        self.image.fill(controller.get_player_color())
+        self.image.fill(controller.color)
+        self.image.set_alpha(controller.alpha_value)
 
         self.rect: pygame.rect.Rect = self.image.get_rect()
         self.rect.midbottom = (config.WINDOW_WIDTH / 2, 0)

@@ -17,6 +17,7 @@ road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
 clock: pygame.time.Clock = pygame.time.Clock()
+best_genome: neat.genome.DefaultGenome = None
 
 
 def eval_genomes(genomes, config):
@@ -60,11 +61,19 @@ def eval_genomes(genomes, config):
 
 
 def eval_genomes_draw_game(genomes, config):
-    global gameManager, road_section_manager
+    global gameManager, road_section_manager, best_genome
+    controllers = []
+    for genome in genomes:
+        if genome.key == best_genome.key:
+            controllers.append(
+                NeuralNetworkController(genome, config, 255, (0, 255, 0))
+            )
+        else:
+            controllers.append(NeuralNetworkController(genome, config))
     controllers = [
         NeuralNetworkController(genome, config) for genome_id, genome in genomes
     ]
-    camera :game.camera.PlayerCamera
+    camera: game.camera.PlayerCamera
     for i in range(
         played_games_per_generation
     ):  # outer loop to run one Genereation through multiple games and calculate a avarage fitness
@@ -101,6 +110,7 @@ def eval_genomes_draw_game(genomes, config):
         controller.calc_fitness()
 
     controllers.sort(key=lambda controller: controller.genome.fitness, reverse=True)
+    best_genome = controllers[0].genome
 
 
 def run_neat(config, check_point: str = None) -> None:

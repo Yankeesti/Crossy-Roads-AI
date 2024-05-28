@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict,Tuple
 import neat
 import neat.genome
 import game
@@ -6,7 +6,8 @@ import itertools
 
 
 class NeuralNetworkController(game.player.controller.Controller):
-    def __init__(self, genome: neat.genome.DefaultGenome, config):
+    def __init__(self, genome: neat.genome.DefaultGenome, config,alpha_value: int = 128,color: Tuple[int, int, int] = (255, 0, 0)):
+        super().__init__(alpha_value, color)
         self.genome = genome
         self.config = config
         self.net = neat.nn.FeedForwardNetwork.create(genome, config)
