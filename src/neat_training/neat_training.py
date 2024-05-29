@@ -17,7 +17,7 @@ road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
 clock: pygame.time.Clock = pygame.time.Clock()
-best_genome: neat.genome.DefaultGenome = None
+best_genome_id: int = 189500
 
 
 def eval_genomes(genomes, config):
@@ -61,18 +61,17 @@ def eval_genomes(genomes, config):
 
 
 def eval_genomes_draw_game(genomes, config):
-    global gameManager, road_section_manager, best_genome
+    global gameManager, road_section_manager, best_genome_id
     controllers = []
-    for genome in genomes:
-        if genome.key == best_genome.key:
+    best_controller: NeuralNetworkController = None
+    for genome_id, genome in genomes:
+        if genome_id == best_genome_id:
             controllers.append(
-                NeuralNetworkController(genome, config, 255, (0, 255, 0))
+                NeuralNetworkController(genome, config, 255, (0, 0, 255))
             )
+            best_controller = controllers[-1]
         else:
             controllers.append(NeuralNetworkController(genome, config))
-    controllers = [
-        NeuralNetworkController(genome, config) for genome_id, genome in genomes
-    ]
     camera: game.camera.PlayerCamera
     for i in range(
         played_games_per_generation
@@ -86,12 +85,12 @@ def eval_genomes_draw_game(genomes, config):
                 gameManager = game.game_manager.GameManager(
                     controllers, road_section_manager
                 )
-                camera = game.camera.PlayerCamera(gameManager)
             else:
                 road_section_manager.set_index(i)
                 gameManager.reset(
                     controllers=controllers, road_section_manager=road_section_manager
                 )
+            camera = game.camera.PlayerCamera(gameManager)
             # Run game Loop
             while True:
                 clock.tick(60)
@@ -104,7 +103,7 @@ def eval_genomes_draw_game(genomes, config):
                     for controller in controllers:
                         if len(controller.fitnesses) > 1:
                             controller.fitnesses.pop()
-                camera.draw(gameManager.player_manager.highest_player)
+                camera.draw(best_controller.player)
 
     for controller in controllers:
         controller.calc_fitness()
@@ -141,4 +140,4 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
-    run_neat(config)
+    run_neat(config,"neat-checkpoint-32")

@@ -1,4 +1,4 @@
-from typing import Dict,Tuple
+from typing import Dict, Tuple
 import neat
 import neat.genome
 import game
@@ -6,7 +6,13 @@ import itertools
 
 
 class NeuralNetworkController(game.player.controller.Controller):
-    def __init__(self, genome: neat.genome.DefaultGenome, config,alpha_value: int = 128,color: Tuple[int, int, int] = (255, 0, 0)):
+    def __init__(
+        self,
+        genome: neat.genome.DefaultGenome,
+        config,
+        alpha_value: int = 1,
+        color: Tuple[int, int, int] = (255, 0, 0),
+    ):
         super().__init__(alpha_value, color)
         self.genome = genome
         self.config = config
@@ -46,6 +52,7 @@ class NeuralNetworkController(game.player.controller.Controller):
         percentage_moves = {
             action: count / total_moves * 100 for action, count in self.moves.items()
         }
+        self.genome.fitness = 0
         if (
             percentage_moves[game.player_action.PlayerAction.STAY] > 25
             and percentage_moves[game.player_action.PlayerAction.STAY] < 55

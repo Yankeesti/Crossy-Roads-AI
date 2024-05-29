@@ -44,6 +44,8 @@ class Player(pygame.sprite.Sprite):
         self.moves: list[Callable, int] = [PlayerAction.STAY, -1]
         self.last_input_fetch = config.INPUT_FETCH_INTERVAL
 
+        controller.set_player(self)
+
     def update(self):
         self.killing_y_point -= config.BLOCK_SIZE * config.KILLING_POINT_SPEED
         if self.killing_y_point < self.rect.bottom:

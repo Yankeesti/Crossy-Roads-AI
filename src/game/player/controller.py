@@ -1,7 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import abc
 import typing
 
 from .player_action import PlayerAction
+if TYPE_CHECKING:
+    from .player import Player
 
 
 class Controller(abc.ABC):
@@ -11,6 +15,7 @@ class Controller(abc.ABC):
     ) -> None:
         self.alpha_value = alpha_value
         self.color = color
+        self.player:Player = None
 
     @abc.abstractmethod
     def get_action(self, inputs: typing.Tuple[float, ...]) -> PlayerAction:
@@ -19,3 +24,6 @@ class Controller(abc.ABC):
     @abc.abstractmethod
     def set_fitness(self, fitness: float) -> None:
         pass
+
+    def set_player(self, player:Player) -> None:
+        self.player = player
