@@ -35,6 +35,8 @@ class HumanController(game.player.controller.Controller):
             game.player_action.PlayerAction.LEFT: 0,
             game.player_action.PlayerAction.RIGHT: 0,
         }
+        self.color = (255, 0, 0)
+        self.alpha_value = 255
         pass
 
     def get_action(self, inputs):
