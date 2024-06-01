@@ -4,6 +4,7 @@ import pygame
 
 from game import config
 from game.map.road_sections.obstacles.base_obstacle import BaseObstacle
+from game.helper import normalize_signed_input, transform_distance
 
 if TYPE_CHECKING:
     from game.map.road_sections.dynamic_road_section import DynamicRoadSection
@@ -48,13 +49,17 @@ class DynamicObstacleMovingRight(DynamicObstacle):
             self.rect[0] = 0
 
     def get_position_relative_to_player(self, player: Player):
-        distance =  (self.rect.right- player.rect.left) / config.BLOCK_SIZE
+        distance = (self.rect.right - player.rect.left) / config.BLOCK_SIZE
         if distance >= 0:
             if distance <= 2:
                 distance = 0
             else:
                 distance -= 2
-        return (distance, self.speed)
+        return normalize_signed_input(
+            transform_distance(distance, config.MAX_DISTANCE_TO_PLAYER),
+            -config.MAX_DISTANCE_TO_PLAYER,
+            config.MAX_DISTANCE_TO_PLAYER,
+        )
 
 
 class DynamicObstacleMovingLeft(DynamicObstacle):
@@ -73,4 +78,9 @@ class DynamicObstacleMovingLeft(DynamicObstacle):
                 distance = 0
             else:
                 distance += 2
-        return (distance, self.speed)
+
+        return normalize_signed_input(
+            transform_distance(distance, config.MAX_DISTANCE_TO_PLAYER),
+            -config.MAX_DISTANCE_TO_PLAYER,
+            config.MAX_DISTANCE_TO_PLAYER,
+        )

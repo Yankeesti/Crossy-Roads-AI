@@ -5,6 +5,7 @@ import random
 
 from .base_road_section import BaseRoadSection
 from game.map.road_sections.moving_direction import MovingDirection
+from game.helper import normalize_signed_input
 from game import config
 from game.map.road_sections.obstacles.dynamic_obstacles import (
     DynamicObstacleMovingLeft,
@@ -85,6 +86,11 @@ class DynamicRoadSection(BaseRoadSection):
         else:
             self.init_cars_move_left()
         self.car_direction: MovingDirection = car_direction
+        if car_direction == MovingDirection.LEFT:
+            self.car_speed = -self.car_speed
+        self.car_speed_normalized = normalize_signed_input(
+            self.car_speed, -config.MAX_CAR_SPEED, config.MAX_CAR_SPEED
+        )
 
     def init_cars_move_right(self):
         for pos in self.car_starting_positions:
@@ -129,7 +135,8 @@ class DynamicRoadSection(BaseRoadSection):
         car_positions = [
             car.get_position_relative_to_player(player) for car in self.cars
         ]
-        car_positions.sort(key=lambda pos: abs(pos[0]))
-        default_values = [(15, 0)] * (3 - len(car_positions))
+        car_positions.sort(key=lambda pos: abs(pos), reverse=True)
+        default_values = [0] * (3 - len(car_positions))
         car_positions.extend(default_values)
+        car_positions.insert(0, self.car_speed_normalized)
         return car_positions

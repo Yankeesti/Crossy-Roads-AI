@@ -1,23 +1,23 @@
 [NEAT]
 fitness_criterion     = max
 fitness_threshold     = 1000
-pop_size              = 7000
+pop_size              = 10
 reset_on_extinction   = False
 
 [DefaultStagnation]
 species_fitness_func = max
-max_stagnation       = 100
-species_elitism      = 10
+max_stagnation       = 130
+species_elitism      = 5
 
 [DefaultReproduction]
-elitism            = 4
+elitism            = 2
 survival_threshold = 0.2
 
 [DefaultGenome]
 # node activation options
-activation_default      = random
+activation_default      = relu
 activation_mutate_rate  = 0.6
-activation_options      = relu gauss
+activation_options      = relu
 
 # node aggregation options
 aggregation_default     = sum
@@ -54,7 +54,7 @@ node_delete_prob        = 0.5
 
 # network parameters
 num_hidden              = 0
-num_inputs              = 27
+num_inputs              = 19
 num_outputs             = 5
 
 # node response options

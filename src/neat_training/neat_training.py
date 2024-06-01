@@ -140,4 +140,8 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
+<<<<<<< Updated upstream
     run_neat(config,"neat-checkpoint-32")
+=======
+    run_neat(config, "neat-checkpoint-52")
+>>>>>>> Stashed changes

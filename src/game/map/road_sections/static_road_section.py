@@ -62,13 +62,14 @@ class StaticRoadSection(BaseRoadSection):
             "index": self.index,
             "static_obstacle_positions": self.static_obstacle_positions,
         }
-    
+
     def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
         obstacle_pos = [
-            ((obstacle.rect.centerx - player.rect.centerx) / config.BLOCK_SIZE, 0)
+            obstacle.get_position_relative_to_player(player)
             for obstacle in self.static_obstacles
         ]
-        obstacle_pos.sort(key=lambda pos: abs(pos[0]))
-        default_values = [(15, 0)] * (3 - len(obstacle_pos))
+        obstacle_pos.sort(key=lambda pos: abs(pos), reverse=True)
+        default_values = [0] * (3 - len(obstacle_pos))
         obstacle_pos.extend(default_values)
+        obstacle_pos.insert(0, 0)
         return obstacle_pos

@@ -18,7 +18,7 @@ INPUT_FETCH_INTERVAL = (
     15  # the interval in wich the Player Fetches the Input from the controller
 )
 KILLING_POINT_SPEED = (
-    0.003  # the speed at wich the killing point moves towards the player
+    0.003 # the speed at wich the killing point moves towards the player
 )
 PLAYER_PAUSE_AFTER_MOVE = 10  # the amount of frames the player pauses after a move
 
@@ -26,7 +26,7 @@ PLAYER_PAUSE_AFTER_MOVE = 10  # the amount of frames the player pauses after a m
 MAX_OBSTACLES = (
     3  # the maximum amount of obstacles that can be placed on a road section
 )
-MAX_CAR_SPEED = 0.07  # the maximum speed of the cars on the road section
+MAX_CAR_SPEED = 0.06  # the maximum speed of the cars on the road section
 
 DYNAMIC_SECTION_IN_A_ROW = [
     0,
@@ -47,3 +47,5 @@ STATIC_SECTIONS_IN_A_ROW = [1, 2, 3, 4]
 STATIC_SECTIONS_IN_A_ROW_PROB = [0.6, 0.5, 0.4, 0.3]
 
 MAX_OVERHANG = 4
+
+MAX_DISTANCE_TO_PLAYER = MAX_OVERHANG + COLUMNS_TOTAL - 1

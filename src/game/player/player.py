@@ -4,6 +4,10 @@ import pygame
 
 from .. import config
 from game.player.player_action import PlayerAction
+from game.helper import (
+    normalize_positive_input,
+    transform_distance,
+)
 
 if TYPE_CHECKING:
     from ..map.road_sections.base_road_section import BaseRoadSection
@@ -83,28 +87,49 @@ class Player(pygame.sprite.Sprite):
     def calc_input(self):
         input = []
         input.append(
-            abs(self.rect.bottom - self.killing_y_point) / config.BLOCK_SIZE
+            normalize_positive_input(
+                transform_distance(
+                    abs(self.rect.bottom - self.killing_y_point) / config.BLOCK_SIZE,
+                    config.MAX_BLOCKS_BACK,
+                ),
+                0,
+                config.MAX_BLOCKS_BACK,
+            )
         )  # Distance to death
         input.append(
-            -(self.rect.left - config.BORDER_LEFT) / config.BLOCK_SIZE
+            normalize_positive_input(
+                transform_distance(
+                    (self.rect.left - config.BORDER_LEFT) / config.BLOCK_SIZE,
+                    config.ROAD_COLUMNS - 1,
+                ),
+                0,
+                config.ROAD_COLUMNS - 1,
+            )
         )  # space to left borderd
         input.append(
-            -(self.rect.right - config.BORDER_RIGHT) / config.BLOCK_SIZE
+            normalize_positive_input(
+                transform_distance(
+                    -(self.rect.right - config.BORDER_RIGHT) / config.BLOCK_SIZE,
+                    config.ROAD_COLUMNS - 1,
+                ),
+                0,
+                config.ROAD_COLUMNS - 1,
+            )
         )  # space to right border
-        input.append(
+        input.extend(
             self.sections[0].previous_section.get_obstacle_positions_relative_to_player(
                 self
             )
         )  # obstacles in previous section
-        input.append(
+        input.extend(
             self.sections[0].get_obstacle_positions_relative_to_player(self)
         )  # obstacles in current section
-        input.append(
+        input.extend(
             self.sections[0]
             .get_next_section()
             .get_obstacle_positions_relative_to_player(self)
         )  # obstacles in next section
-        input.append(
+        input.extend(
             self.sections[0]
             .get_next_section()
             .get_next_section()
