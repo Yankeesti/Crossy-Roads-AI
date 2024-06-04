@@ -23,7 +23,7 @@ class BorderRoadSection(StaticRoadSection):
         )
 
     def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
-        return [0, 1.0, -0.8125, 0.8125]
+        return [0, 1.0, 1.0, 1.0, 0.3125, 0.3125, 1.0]
 
     def to_dict(self):
         return {

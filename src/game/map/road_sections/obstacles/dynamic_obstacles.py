@@ -38,6 +38,22 @@ class DynamicObstacle(BaseObstacle):
         self.speed = speed
         self.car_overhang = car_overhang
 
+    def calc_distance_right_obstacle_left_from_player(
+        self, rect: pygame.rect.Rect
+    ) -> float:
+        return (
+            super().calc_distance_right_obstacle_left_from_player(rect)
+            + self.car_overhang
+        )
+
+    def calc_distance_left_obstacle_right_from_player(
+        self, rect: pygame.rect.Rect
+    ) -> float:
+        return (
+            super().calc_distance_left_obstacle_right_from_player(rect)
+            + self.car_overhang
+        )
+
 
 class DynamicObstacleMovingRight(DynamicObstacle):
     def __init__(self, speed, road_section, starting_x_pos=0, car_overhang=0):
@@ -48,19 +64,6 @@ class DynamicObstacleMovingRight(DynamicObstacle):
         if self.rect[0] > config.WINDOW_WIDTH + self.car_overhang:
             self.rect[0] = 0
 
-    def get_position_relative_to_player(self, player: Player):
-        distance = (self.rect.right - player.rect.left) / config.BLOCK_SIZE
-        if distance >= 0:
-            if distance <= 2:
-                distance = 0
-            else:
-                distance -= 2
-        return normalize_signed_input(
-            transform_distance(distance, config.MAX_DISTANCE_TO_PLAYER),
-            -config.MAX_DISTANCE_TO_PLAYER,
-            config.MAX_DISTANCE_TO_PLAYER,
-        )
-
 
 class DynamicObstacleMovingLeft(DynamicObstacle):
     def __init__(self, speed, road_section, starting_x_pos=0, car_overhang=0):
@@ -70,17 +73,3 @@ class DynamicObstacleMovingLeft(DynamicObstacle):
         self.rect.move_ip(self.speed * config.BLOCK_SIZE, 0)
         if self.rect.right < -self.car_overhang:
             self.rect.left = config.WINDOW_WIDTH
-
-    def get_position_relative_to_player(self, player: Player):
-        distance = (self.rect.left - player.rect.right) / config.BLOCK_SIZE
-        if distance <= 0:
-            if distance >= -2:
-                distance = 0
-            else:
-                distance += 2
-
-        return normalize_signed_input(
-            transform_distance(distance, config.MAX_DISTANCE_TO_PLAYER),
-            -config.MAX_DISTANCE_TO_PLAYER,
-            config.MAX_DISTANCE_TO_PLAYER,
-        )

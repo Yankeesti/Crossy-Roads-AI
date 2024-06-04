@@ -63,13 +63,14 @@ class StaticRoadSection(BaseRoadSection):
             "static_obstacle_positions": self.static_obstacle_positions,
         }
 
-    def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
-        obstacle_pos = [
-            obstacle.get_position_relative_to_player(player)
-            for obstacle in self.static_obstacles
+    def calculate_input_values(self, rect: pygame.Rect) -> list[float]:
+        input_values = [
+            obstacle.get_relative_position(rect) for obstacle in self.static_obstacles
         ]
-        obstacle_pos.sort(key=lambda pos: abs(pos), reverse=True)
-        default_values = [0] * (3 - len(obstacle_pos))
-        obstacle_pos.extend(default_values)
-        obstacle_pos.insert(0, 0)
-        return obstacle_pos
+        input_values.sort(key=lambda pos: pos[0], reverse=True)
+        output = []
+        for input_value in input_values:
+            output.extend(input_value)
+        output.extend((0, 0) * (3 - len(input_values))) #Add default values
+        output.insert(0, 0)
+        return output

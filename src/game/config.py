@@ -18,7 +18,7 @@ INPUT_FETCH_INTERVAL = (
     15  # the interval in wich the Player Fetches the Input from the controller
 )
 KILLING_POINT_SPEED = (
-    0.003 # the speed at wich the killing point moves towards the player
+    0.003  # the speed at wich the killing point moves towards the player
 )
 PLAYER_PAUSE_AFTER_MOVE = 10  # the amount of frames the player pauses after a move
 
@@ -43,8 +43,8 @@ DYNAMIC_SECTION_IN_A_ROW_PROB = [
     0.15,
 ]  # Lists represents the probability of the amount of dynamic road sections that are placed in a row
 
-STATIC_SECTIONS_IN_A_ROW = [1, 2, 3, 4]
-STATIC_SECTIONS_IN_A_ROW_PROB = [0.6, 0.5, 0.4, 0.3]
+STATIC_SECTIONS_IN_A_ROW = [1, 2,]
+STATIC_SECTIONS_IN_A_ROW_PROB = [0.6, 0.5]
 
 MAX_OVERHANG = 4
 

@@ -109,6 +109,7 @@ class DynamicRoadSection(BaseRoadSection):
             )
 
     def update(self):
+        self.inputs.clear()
         self.cars.update()
         dead_players = pygame.sprite.groupcollide(
             self.players_on_section, self.cars, False, False
@@ -131,12 +132,12 @@ class DynamicRoadSection(BaseRoadSection):
             "border_overhang": self.border_overhang,
         }
 
-    def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
-        car_positions = [
-            car.get_position_relative_to_player(player) for car in self.cars
-        ]
-        car_positions.sort(key=lambda pos: abs(pos), reverse=True)
-        default_values = [0] * (3 - len(car_positions))
-        car_positions.extend(default_values)
-        car_positions.insert(0, self.car_speed_normalized)
-        return car_positions
+    def calculate_input_values(self, rect: pygame.Rect) -> list[float]:
+        input_values = [car.get_relative_position(rect) for car in self.cars]
+        input_values.sort(key=lambda pos: pos[0], reverse=True)
+        output = []
+        for input_value in input_values:
+            output.extend(input_value)
+        output.extend((0, 0) * (3 - len(input_values)))  # Add default values
+        output.insert(0, self.car_speed_normalized)
+        return output

@@ -17,16 +17,3 @@ class StaticObstacle(BaseObstacle):
         image.fill((0, 0, 0))
 
         super().__init__(image, x_pos, road_section)
-
-    def get_position_relative_to_player(self, player: Player) -> tuple[int, int]:
-        center_distance = (self.rect.centerx - player.rect.centerx) / config.BLOCK_SIZE
-        if self.rect.centerx < player.rect.centerx:
-            center_distance = center_distance + 1
-        elif self.rect.centerx > player.rect.centerx:
-            center_distance = center_distance - 1
-
-        return normalize_signed_input(
-            transform_distance(center_distance, config.MAX_DISTANCE_TO_PLAYER),
-            -config.MAX_DISTANCE_TO_PLAYER,
-            config.MAX_DISTANCE_TO_PLAYER,
-        )

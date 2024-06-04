@@ -29,6 +29,9 @@ class BaseRoadSection(pygame.sprite.Sprite):
         self.players_on_section = pygame.sprite.Group()
         self.sections_to_draw = None
         self.road_section_manager = road_section_manager
+        self.inputs: dict[float, list[float]] = (
+            {}
+        )  # stores the inputs, the key value is the position of the player
 
     def get_sections_to_draw(self):
         if self.sections_to_draw is not None:
@@ -68,5 +71,15 @@ class BaseRoadSection(pygame.sprite.Sprite):
         pass
 
     @abc.abstractmethod
-    def get_obstacle_positions_relative_to_player(self, player) -> list[float]:
+    def calculate_input_values(self, rect: pygame.rect.Rect) -> list[float]:
         pass
+
+    def get_obstacle_positions_relative_to_player(self, player: Player) -> list[float]:
+        player_rect = player.rect
+        player_position = player_rect.left
+        if player_position in self.inputs:
+            return self.inputs[player_position]
+        else:
+            input_values = self.calculate_input_values(player_rect)
+            self.inputs[player_position] = input_values
+            return input_values
