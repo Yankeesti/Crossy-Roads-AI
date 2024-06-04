@@ -57,27 +57,27 @@ class NeuralNetworkController(game.player.controller.Controller):
             percentage_moves[game.player_action.PlayerAction.STAY] > 25
             and percentage_moves[game.player_action.PlayerAction.STAY] < 55
         ):
-            self.genome.fitness = fitness_unweighted * 0.2
+            self.genome.fitness = fitness_unweighted * 0.05
         if (
             percentage_moves[game.player_action.PlayerAction.UP] > 25
             and percentage_moves[game.player_action.PlayerAction.UP] < 55
         ):
-            self.genome.fitness += fitness_unweighted * 0.2
+            self.genome.fitness += fitness_unweighted * 0.05
         if (
             percentage_moves[game.player_action.PlayerAction.DOWN] > 0.1
             and percentage_moves[game.player_action.PlayerAction.DOWN] < 2
         ):
-            self.genome.fitness += fitness_unweighted * 0.2
+            self.genome.fitness += fitness_unweighted * 0.05
         if (
             percentage_moves[game.player_action.PlayerAction.LEFT] > 3
             and percentage_moves[game.player_action.PlayerAction.LEFT] < 14
         ):
-            self.genome.fitness += fitness_unweighted * 0.2
+            self.genome.fitness += fitness_unweighted * 0.05
         if (
             percentage_moves[game.player_action.PlayerAction.RIGHT] > 3
             and percentage_moves[game.player_action.PlayerAction.RIGHT] < 14
         ):
-            self.genome.fitness += fitness_unweighted * 0.2
+            self.genome.fitness += fitness_unweighted * 0.05
         self.genome.fitness += fitness_unweighted
 
     def get_max_score(self):
