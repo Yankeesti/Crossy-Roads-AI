@@ -96,7 +96,7 @@ class NeuralNetworkController(game.player.controller.Controller):
                 game_index for game_index, x in enumerate(self.fitnesses) if x == i
             ]
             if len(game_indexes) > 0:
-                out_put += f"{i} in Game(s) {[game_index for game_index, x in enumerate(self.fitnesses) if x == i]}, "
+                out_put += f"{i} : {[game_index for game_index, x in enumerate(self.fitnesses) if x == i]}, "
         return out_put
 
     def __str__(self):
