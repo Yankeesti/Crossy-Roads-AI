@@ -3,6 +3,13 @@ import neat
 import neat.genome
 import game
 import itertools
+import math
+
+
+def weight_scores(min_score: float, score: int) -> float:
+    if score < min_score:
+        return score
+    return min_score + 3 * (math.log(score - min_score + 1))
 
 
 class NeuralNetworkController(game.player.controller.Controller):
@@ -46,39 +53,27 @@ class NeuralNetworkController(game.player.controller.Controller):
         self.fitnesses.append(fitness)
 
     def calc_fitness(self):
-        fitness_unweighted = sum(self.fitnesses) / len(self.fitnesses)
-        # calc prozentual moves
-        total_moves = sum(self.moves.values())
-        percentage_moves = {
-            action: count / total_moves * 100 for action, count in self.moves.items()
-        }
-        self.genome.fitness = 0
-        if (
-            percentage_moves[game.player_action.PlayerAction.STAY] > 25
-            and percentage_moves[game.player_action.PlayerAction.STAY] < 55
-        ):
-            self.genome.fitness = fitness_unweighted * 0.05
-        if (
-            percentage_moves[game.player_action.PlayerAction.UP] > 25
-            and percentage_moves[game.player_action.PlayerAction.UP] < 55
-        ):
-            self.genome.fitness += fitness_unweighted * 0.05
-        if (
-            percentage_moves[game.player_action.PlayerAction.DOWN] > 0.1
-            and percentage_moves[game.player_action.PlayerAction.DOWN] < 2
-        ):
-            self.genome.fitness += fitness_unweighted * 0.05
-        if (
-            percentage_moves[game.player_action.PlayerAction.LEFT] > 3
-            and percentage_moves[game.player_action.PlayerAction.LEFT] < 14
-        ):
-            self.genome.fitness += fitness_unweighted * 0.05
-        if (
-            percentage_moves[game.player_action.PlayerAction.RIGHT] > 3
-            and percentage_moves[game.player_action.PlayerAction.RIGHT] < 14
-        ):
-            self.genome.fitness += fitness_unweighted * 0.05
-        self.genome.fitness += fitness_unweighted
+        min_score = self.calculate_weighted_average_of_worst_games()
+        total_fitness: float = 0
+        for fitness in self.fitnesses:
+            total_fitness += weight_scores(min_score, fitness)
+        self.genome.fitness = total_fitness / len(self.fitnesses)
+
+    def calculate_weighted_average_of_worst_games(self) -> float:
+        """ "this is used so that minor improvements have a bigger impact on the fitness"""
+        fitnesses = self.fitnesses.copy()
+        worst_fitnesses: list[int] = []
+
+        for _ in range(6):
+            min_fitness = min(fitnesses)
+            worst_fitnesses.append(min_fitness)
+            fitnesses.remove(min_fitness)
+        weighted_sum = worst_fitnesses[0] * 70
+        weighted_sum = weighted_sum + worst_fitnesses[1] * 20
+        weighted_sum = weighted_sum + worst_fitnesses[2] * 7
+        weighted_sum = weighted_sum + worst_fitnesses[3] * 2
+        weighted_sum = weighted_sum + worst_fitnesses[4]
+        return weighted_sum / 100
 
     def get_max_score(self):
         max_value = max(self.fitnesses)
@@ -100,4 +95,5 @@ class NeuralNetworkController(game.player.controller.Controller):
         return out_put
 
     def __str__(self):
-        return f"Genome({self.genome.key}),fitness ({self.genome.fitness}), Score distribution ({self.get_score_distribution()})"
+        avg_score = sum(self.fitnesses) / len(self.fitnesses)
+        return f"Genome({self.genome.key}), fitness ({self.genome.fitness}), avg({avg_score}), Score distribution ({self.get_score_distribution()})"
