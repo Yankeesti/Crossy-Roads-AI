@@ -11,8 +11,10 @@ from neural_network_controller import NeuralNetworkController
 import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
-played_games_per_generation: int = 20
-neat_road_section_manager.generate_starting_road_sections(played_games_per_generation, 10)
+played_games_per_generation: int = 30
+neat_road_section_manager.generate_starting_road_sections(
+    played_games_per_generation, 10
+)
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
@@ -25,11 +27,11 @@ def eval_genomes(genomes, config):
     controllers = [
         NeuralNetworkController(genome, config) for genome_id, genome in genomes
     ]
-    print("Game: ",end="")
+    print("Game: ", end="")
     for i in range(
         played_games_per_generation
     ):  # outer loop to run one Genereation through multiple games and calculate a avarage fitness
-        print(i,end=", ")
+        print(i, end=", ", flush=True)
         repeat = True
         while (
             repeat
@@ -51,7 +53,7 @@ def eval_genomes(genomes, config):
                 if (
                     road_section_manager.generated_sections == True
                 ):  # when section were generated the this game needs to be replayed, so all genomes after this generation have the same game
-                    print("repeat "+str(i),end=", ")
+                    print("repeat " + str(i), end=", ", flush=True)
                     repeat = True
                     for controller in controllers:
                         if len(controller.fitnesses) > i:
