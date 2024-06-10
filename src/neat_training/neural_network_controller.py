@@ -9,7 +9,7 @@ import math
 def weight_scores(min_score: float, score: int) -> float:
     if score < min_score:
         return score
-    return min_score + 3 * (math.log(score - min_score + 1))
+    return min_score + 0.5*(math.log(score - min_score + 1))
 
 
 class NeuralNetworkController(game.player.controller.Controller):
