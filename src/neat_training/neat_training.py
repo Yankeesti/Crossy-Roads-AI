@@ -12,10 +12,10 @@ from neural_network_controller import NeuralNetworkController
 import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
-played_games_per_generation: int = 20
-# neat_road_section_manager.generate_starting_road_sections(
-#     played_games_per_generation, 10
-# )
+played_games_per_generation: int = 50
+neat_road_section_manager.generate_starting_road_sections(
+    played_games_per_generation, 20
+)
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
@@ -157,4 +157,4 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
-    run_neat(config,"neat-checkpoint-528")
+    run_neat(config)

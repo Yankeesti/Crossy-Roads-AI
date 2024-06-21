@@ -9,7 +9,7 @@ import math
 def weight_scores(min_score: float, score: int) -> float:
     if score < min_score:
         return score
-    return min_score + 0.5*(math.log(score - min_score + 1))
+    return min_score + 0.5 * (math.log(score - min_score + 1))
 
 
 class NeuralNetworkController(game.player.controller.Controller):
@@ -64,16 +64,21 @@ class NeuralNetworkController(game.player.controller.Controller):
         fitnesses = self.fitnesses.copy()
         worst_fitnesses: list[int] = []
 
-        for _ in range(6):
+        for _ in range(len(fitnesses) // 3):
             min_fitness = min(fitnesses)
             worst_fitnesses.append(min_fitness)
             fitnesses.remove(min_fitness)
-        weighted_sum = worst_fitnesses[0] * 70
-        weighted_sum = weighted_sum + worst_fitnesses[1] * 20
-        weighted_sum = weighted_sum + worst_fitnesses[2] * 7
-        weighted_sum = weighted_sum + worst_fitnesses[3] * 2
-        weighted_sum = weighted_sum + worst_fitnesses[4]
-        return weighted_sum / 100
+
+        for i in range(len(worst_fitnesses)):
+            worst_fitnesses[i] = weight_scores(worst_fitnesses[0], worst_fitnesses[i])
+        return self.weight_worst_fitnesses(worst_fitnesses)
+
+    def weight_worst_fitnesses(self, worst_fitnesses: list[int]) -> float:
+        if len(worst_fitnesses) == 1:
+            return worst_fitnesses[0]
+        return (
+            worst_fitnesses.pop(0) * 3 + self.weight_worst_fitnesses(worst_fitnesses)
+        ) / 4
 
     def get_max_score(self):
         max_value = max(self.fitnesses)
