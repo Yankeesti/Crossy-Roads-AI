@@ -2,6 +2,7 @@ import pygame
 import neat
 import os
 import sys
+import math
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -11,10 +12,10 @@ from neural_network_controller import NeuralNetworkController
 import neat_road_section_manager
 
 gameManager: game.game_manager.GameManager = None
-played_games_per_generation: int = 30
-neat_road_section_manager.generate_starting_road_sections(
-    played_games_per_generation, 10
-)
+played_games_per_generation: int = 20
+# neat_road_section_manager.generate_starting_road_sections(
+#     played_games_per_generation, 10
+# )
 road_section_manager: neat_road_section_manager.NeatRoadSectionManager = (
     neat_road_section_manager.NeatRoadSectionManager()
 )
@@ -123,6 +124,10 @@ def eval_genomes_draw_game(genomes, config):
     best_genome = controllers[0].genome
 
 
+def elu_activation(z):
+    return z if z > 0.0 else math.exp(z) - 1
+
+
 def run_neat(config, check_point: str = None) -> None:
     if check_point is not None:
         p = neat.Checkpointer.restore_checkpoint(check_point)
@@ -135,6 +140,7 @@ def run_neat(config, check_point: str = None) -> None:
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
     p.add_reporter(neat.Checkpointer(1))
+    config.genome_config.add_activation("elu", elu_activation)
     pygame.init()
     p.run(eval_genomes, 10000)
 
@@ -151,4 +157,4 @@ if __name__ == "__main__":
         neat.DefaultStagnation,
         config_path,
     )
-    run_neat(config)
+    run_neat(config,"neat-checkpoint-528")
